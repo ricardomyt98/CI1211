@@ -1,25 +1,38 @@
- # -------------------------------------------------------------------
- #            Arquivo: Makefile
- # -------------------------------------------------------------------
- #              Autor: Bruno Müller Junior
- #               Data: 08/2007
- #      Atualizado em: [09/08/2020, 19h:01m]
- #
- # -------------------------------------------------------------------
+#/bin/make
 
-$DEPURA=1
+SRC=src
+INC=include
+OBJ=obj
 
-compilador: lex.yy.c y.tab.c compilador.o compiler.h utilities.h symbol_table.h
-	gcc lex.yy.c compilador.tab.c utilities.c symbol_table.c compilador.o -o compilador -ll -ly -lc
+EXECUTABLE=compilador
+CCFLAGS=-ll -ly -lc -I$(INC)
 
-lex.yy.c: compilador.l compiler.h utilities.c utilities.h
-	flex compilador.l
+TEMP_FILES=	lex.yy \
+			compilador.tab
+FILES=	utilities \
+		symbol_table \
+		compiler
 
-y.tab.c: compilador.y compiler.h
-	bison compilador.y -d -v
+OBJECTS=$(addprefix $(OBJ)/, $(addsuffix .o, $(FILES) $(TEMP_FILES)))
+SRC_FILES=$(addprefix $(SRC)/, $(addsuffix .c, $(FILES) $(TEMP_FILES)))
+SRC_TEMP_FILES=$(addprefix $(SRC)/, $(addsuffix .c, $(TEMP_FILES)))
 
-compilador.o : compiler.h compiler.c
-	gcc -c compiler.c -o compilador.o
+main: flex bison $(OBJECTS)
+	gcc $(OBJECTS) $(CCFLAGS) -o $(EXECUTABLE)
 
-clean :
-	rm -f compilador.tab.* lex.yy.c compilador.o compilador
+flex:
+	cd $(SRC) && flex compilador.l
+
+bison:
+	cd $(SRC) && bison compilador.y -d -v
+
+$(OBJ)/%.o: $(SRC)/%.c
+	gcc -c $< -o $@ $(CCFLAGS)
+
+clean:
+	rm -f $(OBJECTS)
+	rm -f	compilador \
+			$(SRC)/compilador.output \
+			$(SRC)/compilador.tab.h \
+			$(SRC_TEMP_FILES) \
+			MEPA
