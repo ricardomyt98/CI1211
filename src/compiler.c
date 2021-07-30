@@ -268,7 +268,7 @@ void CHPR() {
     Generic_symbol_structure procedure_struct = search_in_symbol_table(comp_struct.call_targets[comp_struct.current_call].label, comp_struct.sym_table);
     char str[100];
 
-    sprintf(str, "CHPR R%02d, %d", procedure_struct.MEPA_label, procedure_struct.lexicon_lvl);
+    sprintf(str, "CHPR R%02d, %d", procedure_struct.MEPA_label, comp_struct.lexicon_lvl);
     geraCodigo(NULL, str);
 }
 

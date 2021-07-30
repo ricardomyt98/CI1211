@@ -179,7 +179,11 @@ r_commands: r_command T_SEMICOLON r_commands | r_command | r_command T_SEMICOLON
 r_command: r_assignment | r_while_loop | r_if | r_procedure_call | r_function_call | r_read | r_write
 ;
 
-r_read: T_READ { LEIT(); } T_OPEN_PARENTHESIS T_IDENTIFIER { store_for_read(); } T_CLOSE_PARENTHESIS
+r_read: T_READ T_OPEN_PARENTHESIS r_read_identifiers T_CLOSE_PARENTHESIS
+;
+
+r_read_identifiers: T_IDENTIFIER { LEIT(); store_for_read(); }
+                  | T_IDENTIFIER { LEIT(); store_for_read(); } T_COMMA r_read_identifiers
 ;
 
 r_write: T_WRITE T_OPEN_PARENTHESIS { init_expression(); } r_write_identifier_list { finish_expression(); } T_CLOSE_PARENTHESIS
@@ -208,7 +212,7 @@ r_if_else: r_compound_command
          | r_command
 ;
 
-r_while_loop: T_WHILE { allocate_print_while_stack_label(); init_expression(); } T_OPEN_PARENTHESIS r_expression { evaluate_conditional_expression(); DSVF2(); } T_CLOSE_PARENTHESIS T_DO r_while_statements { DSVS1(); free_print_while_stack_label(); }
+r_while_loop: T_WHILE { allocate_print_while_stack_label(); init_expression(); } r_expression { evaluate_conditional_expression(); DSVF2(); } T_DO r_while_statements { DSVS1(); free_print_while_stack_label(); }
 ;
 
 r_while_statements: r_compound_command | r_command
