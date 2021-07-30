@@ -298,7 +298,10 @@ Compiler_structure variable_initializer() {
 }
 
 void add_variable_to_symbol_table() {
+    DEBUG("adding %s", comp_struct.last_identifier);
     add_element_to_symbol_table(&(comp_struct.sym_table), create_symbol_variable(comp_struct.last_identifier, VAR_UNDEFINED, comp_struct.lexicon_lvl, comp_struct.variable_counter_list[comp_struct.lexicon_lvl]));
+
+
 
     // Increment the number of variables in that lexicon level.
     comp_struct.variable_counter_list[comp_struct.lexicon_lvl]++;
@@ -618,7 +621,7 @@ void push_stack(Stack_type type) {
     comp_struct.stack[comp_struct.stack_head] = (Stack_label){
         .type = type,
         .first_label = get_num_label(),
-        .second_label = type != BLOCK ? get_num_label() : -1
+        .second_label = type != BLOCK && type != REPEAT ? get_num_label() : -1
     };
 }
 

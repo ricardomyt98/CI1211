@@ -71,7 +71,10 @@ else { return flex_printer(S_ELSE, T_ELSE, "else"); }
 
 do { return flex_printer(S_DO, T_DO, "do"); }
 while { return flex_printer(S_WHILE, T_WHILE, "while"); }
- 
+
+repeat { return flex_printer(S_REPEAT, T_REPEAT, "repeat"); }
+until { return flex_printer(S_UNTIL, T_UNTIL, "until"); }
+
 and { return flex_printer(S_AND, T_AND, "and"); }
 or { return flex_printer(S_OR, T_OR, "or"); }
 not { return flex_printer(S_NOT, T_NOT, "not"); }

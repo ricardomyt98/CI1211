@@ -34,6 +34,8 @@ typedef enum Symbol {
     // Loops
     S_DO,
     S_WHILE,
+    S_REPEAT,
+    S_UNTIL,
 
     // Logical symbols
     S_AND,
@@ -96,7 +98,8 @@ typedef struct Operation_structure {
 typedef enum Stack_type {
     WHILE,
     IF,
-    BLOCK
+    BLOCK,
+    REPEAT
 } Stack_type;
 
 typedef struct Stack_label {

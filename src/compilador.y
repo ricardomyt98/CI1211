@@ -42,6 +42,8 @@ Compiler_structure comp_struct;
     // Loops
     T_DO
     T_WHILE
+    T_REPEAT
+    T_UNTIL
 
     // Logical symbols
     T_AND
@@ -176,7 +178,13 @@ r_compound_command: T_BEGIN r_commands T_END
 r_commands: r_command T_SEMICOLON r_commands | r_command | r_command T_SEMICOLON | %empty
 ;
 
-r_command: r_assignment | r_while_loop | r_if | r_procedure_call | r_function_call | r_read | r_write
+r_command: r_assignment | r_while_loop | r_if | r_procedure_call | r_function_call | r_read | r_write | r_repeat_loop
+;
+
+r_repeat_loop: T_REPEAT { push_stack(REPEAT); print_first_stack_label(); } r_repeat_commands T_UNTIL { init_expression(); } r_expression { evaluate_conditional_expression(); DSVF1(); pop_stack(); }
+;
+
+r_repeat_commands: r_commands | r_compound_command
 ;
 
 r_read: T_READ T_OPEN_PARENTHESIS r_read_identifiers T_CLOSE_PARENTHESIS
